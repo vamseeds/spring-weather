@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
         tools {
                      jdk "jdk14"
-                     mvn "maven"
+                     maven "maven"
                }
             steps {
                 echo 'Building..'
