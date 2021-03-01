@@ -14,8 +14,9 @@ pipeline {
         }
         stage('Build') {
         tools {
-                           jdk "jdk14"
-                        }
+                     jdk "jdk14"
+                     mvn "maven"
+               }
             steps {
                 echo 'Building..'
                 sh 'java -version'
@@ -32,6 +33,9 @@ pipeline {
         }
 
         stage('Docker-Image-Build'){
+        tools {
+            docker "docker"
+        }
         steps {
             echo 'Building Docker Image'
             sh 'docker build -t weather-app .'
