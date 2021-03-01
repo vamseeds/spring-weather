@@ -40,13 +40,13 @@ pipeline {
 
         steps {
             echo 'Building Docker Image'
-            sh 'sudo docker build -t weather-app .'
+            sh 'docker build -t weather-app .'
         }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying.... Running Docker Image'
-                sh 'sudo docker run -p 8080:8080 weather-app:latest -d'
+                sh 'docker run -p 8080:8080 weather-app:latest -d'
             }
         }
     }
