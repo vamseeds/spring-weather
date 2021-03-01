@@ -26,6 +26,10 @@ pipeline {
             }
         }
         stage('Test') {
+        tools {
+                             jdk "jdk14"
+                             maven "maven"
+                       }
             steps {
                 echo 'Testing..'
                 sh 'mvn test'
