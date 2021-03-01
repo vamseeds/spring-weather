@@ -33,9 +33,7 @@ pipeline {
         }
 
         stage('Docker-Image-Build'){
-        tools {
-            docker "docker"
-        }
+
         steps {
             echo 'Building Docker Image'
             sh 'docker build -t weather-app .'
