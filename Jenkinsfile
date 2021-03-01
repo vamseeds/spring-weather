@@ -21,7 +21,7 @@ pipeline {
                 echo 'Building..'
                 sh 'java -version'
                 echo "PATH = ${PATH}"
-                sh 'mvn clean install'
+                sh 'mvn clean install -Dmaven.test.skip=true'
 
             }
         }
