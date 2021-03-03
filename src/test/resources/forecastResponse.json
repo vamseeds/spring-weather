@@ -1,0 +1,23 @@
+{
+  "cityName": "Nellore",
+  "dayWeatherList": [
+    {
+      "date": "2021-03-06",
+      "minimumTemperature": 19.18,
+      "maximumTemperature": 34.67,
+      "suggestions": ["Carry Umbrella"]
+    },
+    {
+      "date": "2021-03-05",
+      "minimumTemperature": 19.25,
+      "maximumTemperature": 32.16,
+      "suggestions": ["Carry Umbrella"]
+    },
+    {
+      "date": "2021-03-04",
+      "minimumTemperature": 20.17,
+      "maximumTemperature": 31.54,
+      "suggestions": ["Carry Umbrella"]
+    }
+  ]
+}

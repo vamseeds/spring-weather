@@ -7,6 +7,7 @@ import com.weather.demo.dto.weather.ForecastResponse;
 import com.weather.demo.errors.InternalServerError;
 import com.weather.demo.errors.NotFoundException;
 import com.weather.demo.proxy.OpenWeatherProxy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class WeatherService {
 
@@ -28,11 +30,14 @@ public class WeatherService {
 
     public ForecastResponse getWeather(String cityName) {
         WeatherResponse weatherResponse = openWeatherProxy.getWeather(cityName, METRIC, appId);
-        if (Objects.nonNull(weatherResponse) &&Objects.nonNull(weatherResponse.getCod())&&weatherResponse.getCod().equalsIgnoreCase("200") && Objects.nonNull(weatherResponse.getList()) && !weatherResponse.getList().isEmpty()) {
+        log.info("Weather Response : {}", weatherResponse);
+        if (Objects.nonNull(weatherResponse) && Objects.nonNull(weatherResponse.getCod()) && weatherResponse.getCod().equalsIgnoreCase("200") && Objects.nonNull(weatherResponse.getList()) && !weatherResponse.getList().isEmpty()) {
             return buildForecastWithMinMaxTemperatures(cityName, weatherResponse.getList());
-        } else if(Objects.nonNull(weatherResponse) &&Objects.nonNull(weatherResponse.getCod())&&weatherResponse.getCod().equalsIgnoreCase("404")){
+        } else if (Objects.nonNull(weatherResponse) && Objects.nonNull(weatherResponse.getCod()) && weatherResponse.getCod().equalsIgnoreCase("404")) {
+            log.error("City Not Found - {} ", cityName);
             throw new NotFoundException("City Not Found");
-        }else {
+        } else {
+            log.error("Error Retrieving  response from external System ");
             throw new InternalServerError("Unable to Parse Response From Downstream");
         }
     }
@@ -43,11 +48,9 @@ public class WeatherService {
     }
 
     private Collection<DayWeather> getNext3DayWeatherForecast(List<ListItem> list) {
-        // HashMap<LocalDate, TreeSet<BigDecimal>> forecastMap=
-        return list.stream().filter(listItem -> {
-            return listItem.getLocalDateTime().isBefore(LocalDate.now().plusDays(3).atTime(23, 59, 59))
-                    && listItem.getLocalDateTime().isAfter(LocalDate.now().atTime(23, 59, 59));
-        })
+        return list.stream().filter(listItem ->
+                listItem.getLocalDateTime().isBefore(LocalDate.now().plusDays(3).atTime(23, 59, 59))
+                        && listItem.getLocalDateTime().isAfter(LocalDate.now().atTime(23, 59, 59)))
                 .map(listItem -> {
                     List<String> suggestions = new ArrayList<>();
                     if (listItem.getRain() != null) {
